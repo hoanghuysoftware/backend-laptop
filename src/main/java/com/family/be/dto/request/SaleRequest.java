@@ -18,5 +18,5 @@ public class SaleRequest {
     private Date dateStart;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateEnd;
-    private int amongSale;
+    private Long amongSale;
 }
