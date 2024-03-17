@@ -23,7 +23,7 @@ public class DetailReceipt {
     @ToString.Exclude
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "receipt_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

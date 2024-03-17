@@ -8,10 +8,8 @@ import com.family.be.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +19,10 @@ public class ReceiptServiceIMPL implements ReceiptService {
     private final ProductAttributeRepository productAttributeRepository;
     private final ImporterRepository importerRepository;
     private final BrandRepository brandRepository;
+    private final DetailReceiptRepository detailReceiptRepository;
 
     @Override
+    @Transactional
     public Receipt createNewReceiptForProductExists(ReceiptRequest receiptRequest) {
         Importer importer = importerRepository.findImporterById(receiptRequest.getImporterId()).orElseThrow(
                 () -> new RuntimeException("Not found importer has id: " + receiptRequest.getImporterId()));
@@ -30,27 +30,31 @@ public class ReceiptServiceIMPL implements ReceiptService {
         Receipt receipt = Receipt.builder()
                 .importer(importer)
                 .dateImport(new Date())
+                .totalReceipt(0L)
                 .build();
 
-        Set<DetailReceipt> detailReceiptSet = new HashSet<>();
+        List<DetailReceipt> detailReceiptSet = new ArrayList<>();
         receiptRequest.getDetails().forEach(item -> {
             Product product = productRepository.getProductById(item.getProductId()).orElseThrow(
-                    () -> new RuntimeException("Not found product !"));
+                    () -> new RuntimeException("Not found product exists!"));
 
             product.setPriceProduct(item.getPriceImport() + 2000000);
             product.setQuantityProduct(product.getQuantityProduct() + item.getQuantityImport());
-            detailReceiptSet.add(DetailReceipt.builder()
+            receipt.setTotalReceipt(receipt.getTotalReceipt() + (item.getPriceImport() * item.getQuantityImport()));
+            DetailReceipt detailReceipt = DetailReceipt.builder()
                     .receipt(receipt)
                     .product(product)
                     .priceDetailReceipt(item.getPriceImport())
                     .quantityDetailReceipt(item.getQuantityImport())
-                    .build());
+                    .build();
+            detailReceiptSet.add(detailReceipt);
         });
         receipt.setDetailReceipts(detailReceiptSet);
         return receiptRepository.save(receipt);
     }
 
     @Override
+    @Transactional
     public Receipt createNewReceiptForProductNew(ReceiptRequest receiptRequest) {
         Importer importer = importerRepository.findImporterById(receiptRequest.getImporterId()).orElseThrow(
                 () -> new RuntimeException("Not found importer has id: " + receiptRequest.getImporterId()));
@@ -58,22 +62,26 @@ public class ReceiptServiceIMPL implements ReceiptService {
         Receipt receipt = Receipt.builder()
                 .importer(importer)
                 .dateImport(new Date())
+                .totalReceipt(0L)
                 .build();
 
-        Set<DetailReceipt> detailReceiptSet = new HashSet<>();
+        List<DetailReceipt> detailReceiptSet =  new ArrayList<>();
         receiptRequest.getDetails().forEach(item -> {
-            Product product = createProduct(item.getProductRequest());
 
+            Product product = createProduct(item.getProductRequest());
             product.setPriceProduct(item.getPriceImport() + 2000000);
             product.setQuantityProduct(product.getQuantityProduct() + item.getQuantityImport());
-            detailReceiptSet.add(DetailReceipt.builder()
+
+            receipt.setTotalReceipt(receipt.getTotalReceipt() + (item.getPriceImport()* item.getQuantityImport()));
+            DetailReceipt detailReceipt = DetailReceipt.builder()
                     .receipt(receipt)
                     .product(product)
                     .priceDetailReceipt(item.getPriceImport())
                     .quantityDetailReceipt(item.getQuantityImport())
-                    .build());
+                    .build();
+            detailReceiptSet.add(detailReceipt);
         });
-        receipt.setDetailReceipts(detailReceiptSet);
+        receipt.setDetailReceipts( detailReceiptSet);
         return receiptRepository.save(receipt);
     }
 

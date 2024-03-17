@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -19,6 +17,7 @@ public class Receipt {
     private Long id;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dateImport;
+    private Long totalReceipt;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "importer_id")
@@ -29,7 +28,7 @@ public class Receipt {
     @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<DetailReceipt> detailReceipts = new HashSet<>();
+    private List<DetailReceipt> detailReceipts = new ArrayList<>();
 
 
 

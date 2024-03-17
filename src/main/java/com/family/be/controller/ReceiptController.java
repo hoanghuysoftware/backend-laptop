@@ -52,9 +52,10 @@ public class ReceiptController {
                     .status("OK")
                     .message("Import new products successfully !")
                     .createAt(new Date())
-                    .data(receiptService.createNewReceiptForProductExists(receiptRequest))
+                    .data(receiptService.createNewReceiptForProductNew(receiptRequest))
                     .build(), HttpStatus.CREATED);
         }catch (Exception e){
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(ResponseMessage.builder()
                     .status("Failed")
                     .message("Import new products not successfully !")
