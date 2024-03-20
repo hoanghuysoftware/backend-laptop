@@ -19,16 +19,18 @@ public class ReceiptServiceIMPL implements ReceiptService {
     private final ProductAttributeRepository productAttributeRepository;
     private final ImporterRepository importerRepository;
     private final BrandRepository brandRepository;
-    private final DetailReceiptRepository detailReceiptRepository;
+    private final AdminRepository adminRepository;
 
     @Override
     @Transactional
     public Receipt createNewReceiptForProductExists(ReceiptRequest receiptRequest) {
         Importer importer = importerRepository.findImporterById(receiptRequest.getImporterId()).orElseThrow(
                 () -> new RuntimeException("Not found importer has id: " + receiptRequest.getImporterId()));
+        Admin admin = adminRepository.getAdminById(receiptRequest.getAdminId());
 
         Receipt receipt = Receipt.builder()
                 .importer(importer)
+                .admin(admin)
                 .dateImport(new Date())
                 .totalReceipt(0L)
                 .build();
@@ -58,9 +60,11 @@ public class ReceiptServiceIMPL implements ReceiptService {
     public Receipt createNewReceiptForProductNew(ReceiptRequest receiptRequest) {
         Importer importer = importerRepository.findImporterById(receiptRequest.getImporterId()).orElseThrow(
                 () -> new RuntimeException("Not found importer has id: " + receiptRequest.getImporterId()));
+        Admin admin = adminRepository.getAdminById(receiptRequest.getAdminId());
 
         Receipt receipt = Receipt.builder()
                 .importer(importer)
+                .admin(admin)
                 .dateImport(new Date())
                 .totalReceipt(0L)
                 .build();

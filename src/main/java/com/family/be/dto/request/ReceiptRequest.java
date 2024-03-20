@@ -13,5 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ReceiptRequest {
     private Long importerId;
+    private Long adminId;
     private List<DetailsReceiptRequest> details;
 }

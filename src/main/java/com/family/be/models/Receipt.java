@@ -25,10 +25,17 @@ public class Receipt {
     @ToString.Exclude
     private Importer importer;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Admin admin;
+
     @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<DetailReceipt> detailReceipts = new ArrayList<>();
+
 
 
 
