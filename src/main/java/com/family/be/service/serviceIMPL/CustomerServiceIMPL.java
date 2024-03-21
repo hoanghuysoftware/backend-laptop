@@ -37,6 +37,11 @@ public class CustomerServiceIMPL implements CustomerService {
     }
 
     @Override
+    public Customer getACustomerByID(Long id) {
+        return customerRepository.findCustomerById(id);
+    }
+
+    @Override
     public Customer createNewCustomer(SignUp signUp) {
         Customer customer = Customer.builder()
                 .nameCustomer(signUp.getNameRequest())
@@ -69,6 +74,7 @@ public class CustomerServiceIMPL implements CustomerService {
 
         return customerRepository.save(customer);
     }
+
 
 
 }

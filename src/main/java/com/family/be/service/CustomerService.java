@@ -10,4 +10,5 @@ public interface CustomerService {
     boolean existsCustomerByName(String name);
     boolean existsCustomerByEmail(String email);
     List<Customer> getAllCustomer();
+    Customer getACustomerByID(Long id);
 }

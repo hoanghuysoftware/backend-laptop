@@ -66,6 +66,12 @@ public class Product {
     @JsonIgnore
     private List<DetailsCart> detailsCarts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private List<DetailsOrder> detailsOrders = new ArrayList<>();
+
 
 
 }

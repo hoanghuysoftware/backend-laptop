@@ -19,7 +19,7 @@ public class Cart {
     private int quantityCart;
     private Long priceCart;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<DetailsCart> detailsCarts = new ArrayList<>();

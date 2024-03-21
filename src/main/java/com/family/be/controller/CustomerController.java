@@ -30,6 +30,16 @@ public class CustomerController {
                 .build(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseMessage> doGetAId(@PathVariable Long id){
+        return new ResponseEntity<>(ResponseMessage.builder()
+                .status("TRUE")
+                .message("Get all customer successfully !")
+                .createAt(new Date())
+                .data(customerService.getACustomerByID(id))
+                .build(), HttpStatus.OK);
+    }
+
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseMessage> doCreateNewCustomer(@RequestBody SignUp signUp){
         boolean existsName = customerService.existsCustomerByName(signUp.getNameRequest());
