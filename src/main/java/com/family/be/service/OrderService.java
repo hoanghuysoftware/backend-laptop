@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface OrderService {
     OrderInfo createNewOrder(OrderRequest orderRequest);
+    OrderInfo updateOrderStatus(Long idOrder, int orderStatus);
+    OrderInfo getOrderById(Long id);
     List<OrderInfo> getAllOrder();
-
     List<OrderInfo> getOrderInfoByCustomer(Long id);
 }
