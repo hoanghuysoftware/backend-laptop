@@ -30,7 +30,6 @@ public class ApiCalled implements HandlerInterceptor {
                 .timestamp(timestamp)
                 .request(handler.toString())
                 .build();
-
         apiLogRepository.save(apiLog);
     }
 }
